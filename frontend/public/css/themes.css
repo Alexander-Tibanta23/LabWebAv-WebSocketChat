@@ -1,0 +1,65 @@
+/* Tema claro (similar a Discord claro) */
+.light-theme {
+    --bg-color: #ffffff;
+    --text-color: #2e3338;
+    --primary-color: #5865f2;
+    --secondary-color: #ebedef;
+    --message-sent-bg: #5865f2;
+    --message-sent-text: #ffffff;
+    --message-received-bg: #ebedef;
+    --message-received-text: #2e3338;
+    --header-bg: #5865f2;
+    --header-text: #ffffff;
+    --input-bg: #ffffff;
+    --input-text: #2e3338;
+    --border-color: #d4d7dc;
+}
+
+/* Tema oscuro (similar a Discord oscuro) */
+.dark-theme {
+    --bg-color: #36393f;
+    --text-color: #dcddde;
+    --primary-color: #5865f2;
+    --secondary-color: #2f3136;
+    --message-sent-bg: #5865f2;
+    --message-sent-text: #ffffff;
+    --message-received-bg: #2f3136;
+    --message-received-text: #dcddde;
+    --header-bg: #2f3136;
+    --header-text: #ffffff;
+    --input-bg: #40444b;
+    --input-text: #dcddde;
+    --border-color: #202225;
+}
+
+/* Aplicar variables de tema */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+#chat-section header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
+}
+
+#messageInput {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border-color: var(--border-color);
+}
+
+.message-sent {
+    background-color: var(--message-sent-bg);
+    color: var(--message-sent-text);
+}
+
+.message-received {
+    background-color: var(--message-received-bg);
+    color: var(--message-received-text);
+}
+
+footer {
+    background-color: var(--secondary-color);
+    border-color: var(--border-color) !important;
+}
