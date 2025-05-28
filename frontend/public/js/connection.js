@@ -1,27 +1,26 @@
 let ws;
-let connected = false;
-let currentUsername = '';
+let _connected = false;
+let _currentUsername = '';
 
 function connect() {
     const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
     ws = new WebSocket(`${protocol}//${location.host}`);
 
     ws.onopen = () => {
-        connected = true;
+        _connected = true;
         updateStatus('Conectado', 'success');
         document.getElementById('sendBtn').disabled = false;
     };
 
     ws.onmessage = (event) => {
         const msg = JSON.parse(event.data);
-        // Solo mostrar mensajes si el usuario está en el chat
         if (document.getElementById('chat-section').classList.contains('d-none') === false) {
-            addMessage(msg.username, msg.text, msg.timestamp, msg.username === currentUsername);
+            addMessage(msg.username, msg.text, msg.timestamp, msg.username === _currentUsername);
         }
     };
 
     ws.onclose = () => {
-        connected = false;
+        _connected = false;
         updateStatus('Desconectado - Intentando reconectar...', 'danger');
         document.getElementById('sendBtn').disabled = true;
         setTimeout(connect, 3000);
@@ -38,20 +37,52 @@ function updateStatus(text, type) {
     statusElement.className = type === 'success' ? 'text-success' : 'text-danger';
 }
 
+function addMessage(username, text, timestamp, isSent) {
+    const messagesContainer = document.getElementById('messages');
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${isSent ? 'message-sent' : 'message-received'}`;
+    
+    messageElement.innerHTML = `
+        <div class="message-username">${username}</div>
+        <p class="message-text">${text}</p>
+        <div class="message-time">${timestamp}</div>
+    `;
+    
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
 function sendMessage(message) {
-    if (!connected) {
+    if (!_connected) {
         alert('No hay conexión al servidor');
         return false;
     }
-
     ws.send(JSON.stringify(message));
     return true;
 }
 
-// Inicializar conexión al cargar la página
+function setCurrentUsername(username) {
+    _currentUsername = username;
+}
+
+function getCurrentUsername() {
+    return _currentUsername;
+}
+
+function getConnected() {
+    return _connected;
+}
+
+// Initialize connection when loaded
 document.addEventListener('DOMContentLoaded', () => {
     connect();
 });
 
-// Exportar funciones necesarias para otros archivos
-export { connected, currentUsername, sendMessage };
+// Export functions
+export {
+    getConnected,
+    getCurrentUsername,
+    setCurrentUsername,
+    sendMessage,
+    addMessage
+};
